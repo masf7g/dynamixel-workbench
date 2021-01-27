@@ -17,6 +17,7 @@
 /* Authors: Taehun Lim (Darby), Ryan Shim */
 
 #include "../../include/dynamixel_workbench_toolbox/dynamixel_workbench.h"
+#include <thread>
 
 static const uint8_t WHEEL_MODE = 1;
 static const uint8_t JOINT_MODE = 2;
@@ -198,11 +199,7 @@ bool DynamixelWorkbench::changeBaudrate(uint8_t id, uint32_t new_baudrate, const
        break;
     }
   }
-#if defined(__OPENCR__) || defined(__OPENCM904__)
-    delay(2000);
-#else
-    usleep(1000*2000);
-#endif
+  std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
   if (result == false)
   {

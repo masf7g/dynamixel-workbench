@@ -24,6 +24,8 @@
 #if defined(__OPENCR__) || defined(__OPENCM904__)
   #include <Arduino.h>
   #include <DynamixelSDK.h>
+#elif defined(WIN32)
+  #include "dynamixel_sdk/dynamixel_sdk.h"
 #elif defined(__linux__) || defined(__APPLE__)
   #include "unistd.h"
   #include "dynamixel_sdk/dynamixel_sdk.h"

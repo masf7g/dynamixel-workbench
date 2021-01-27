@@ -17,6 +17,7 @@
 /* Authors: Taehun Lim (Darby) */
 
 #include "../../include/dynamixel_workbench_toolbox/dynamixel_driver.h"
+#include <thread>
 
 DynamixelDriver::DynamixelDriver() : tools_cnt_(0), 
                                     sync_write_handler_cnt_(0), 
@@ -420,11 +421,7 @@ bool DynamixelDriver::reboot(uint8_t id, const char **log)
   else
   {
     sdk_error.dxl_comm_result = packetHandler_->reboot(portHandler_, id, &sdk_error.dxl_error);
-#if defined(__OPENCR__) || defined(__OPENCM904__)
-    delay(1000);
-#else
-    usleep(1000*1000);
-#endif
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     if (sdk_error.dxl_comm_result != COMM_SUCCESS)
     {
@@ -463,11 +460,7 @@ bool DynamixelDriver::reset(uint8_t id, const char **log)
   if (getProtocolVersion() == 1.0)
   {
     sdk_error.dxl_comm_result = packetHandler_->factoryReset(portHandler_, id, 0x00, &sdk_error.dxl_error);
-#if defined(__OPENCR__) || defined(__OPENCM904__)
-    delay(2000);
-#else
-    usleep(1000*2000);
-#endif
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     if (sdk_error.dxl_comm_result != COMM_SUCCESS)
     {
@@ -522,11 +515,7 @@ bool DynamixelDriver::reset(uint8_t id, const char **log)
   else if (getProtocolVersion() == 2.0)
   {
     sdk_error.dxl_comm_result = packetHandler_->factoryReset(portHandler_, id, 0xff, &sdk_error.dxl_error);
-#if defined(__OPENCR__) || defined(__OPENCM904__)
-    delay(2000);
-#else
-    usleep(1000*2000);
-#endif
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     if (sdk_error.dxl_comm_result != COMM_SUCCESS)
     {
@@ -570,13 +559,7 @@ bool DynamixelDriver::writeRegister(uint8_t id, uint16_t address, uint16_t lengt
 {
   ErrorFromSDK sdk_error = {0, false, false, 0};
 
-#if defined(__OPENCR__) || defined(__OPENCM904__)
-    delay(10);
-#else
-    usleep(1000*10);
-#endif
-
-  sdk_error.dxl_comm_result = packetHandler_->writeTxRx(portHandler_, 
+  sdk_error.dxl_comm_result = packetHandler_->writeTxRx(portHandler_,
                                                         id, 
                                                         address, 
                                                         length, 
@@ -616,12 +599,6 @@ bool DynamixelDriver::writeRegister(uint8_t id, const char *item_name, int32_t d
   uint8_t data_1_byte = (uint8_t)data;
   uint16_t data_2_byte = (uint16_t)data;
   uint32_t data_4_byte = (uint32_t)data;
-
-#if defined(__OPENCR__) || defined(__OPENCM904__)
-    delay(10);
-#else
-    usleep(1000*10);
-#endif
 
   switch (control_item->data_length)
   {
@@ -681,13 +658,7 @@ bool DynamixelDriver::writeOnlyRegister(uint8_t id, uint16_t address, uint16_t l
 {
   ErrorFromSDK sdk_error = {0, false, false, 0};
 
-#if defined(__OPENCR__) || defined(__OPENCM904__)
-    delay(10);
-#else
-    usleep(1000*10);
-#endif
-
-  sdk_error.dxl_comm_result = packetHandler_->writeTxOnly(portHandler_, 
+  sdk_error.dxl_comm_result = packetHandler_->writeTxOnly(portHandler_,
                                                           id, 
                                                           address, 
                                                           length, 
@@ -717,12 +688,6 @@ bool DynamixelDriver::writeOnlyRegister(uint8_t id, const char *item_name, int32
 
   control_item = tools_[factor].getControlItem(item_name, log);
   if (control_item == NULL) return false;
-
-#if defined(__OPENCR__) || defined(__OPENCM904__)
-    delay(10);
-#else
-    usleep(1000*10);
-#endif
 
   switch (control_item->data_length)
   {
@@ -773,7 +738,7 @@ bool DynamixelDriver::readRegister(uint8_t id, uint16_t address, uint16_t length
 {
   ErrorFromSDK sdk_error = {0, false, false, 0};
   
-  uint8_t data_read[length];
+  uint8_t* data_read = (uint8_t*)alloca(length);
 
   sdk_error.dxl_comm_result = packetHandler_->readTxRx(portHandler_, 
                                                       id, 
@@ -1009,7 +974,7 @@ bool DynamixelDriver::syncWrite(uint8_t index, uint8_t *id, uint8_t id_num, int3
   ErrorFromSDK sdk_error = {0, false, false, 0};
 
   uint8_t parameter[4] = {0, 0, 0, 0};
-  uint8_t multi_parameter[4*data_num_for_each_id];
+  uint8_t* multi_parameter = (uint8_t*)alloca(4*data_num_for_each_id);
   uint8_t cnt = 0;
 
   for (int i = 0; i < id_num; i++)
