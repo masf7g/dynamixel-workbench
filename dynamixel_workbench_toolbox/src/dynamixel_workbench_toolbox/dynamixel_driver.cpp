@@ -18,7 +18,9 @@
 
 #include "../../include/dynamixel_workbench_toolbox/dynamixel_driver.h"
 #include <thread>
-#include <alloca.h>
+#if !defined(WIN32)
+  #include <alloca.h>
+#endif
 
 DynamixelDriver::DynamixelDriver() : tools_cnt_(0), 
                                     sync_write_handler_cnt_(0), 
