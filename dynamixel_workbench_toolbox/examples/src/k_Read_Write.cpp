@@ -18,80 +18,78 @@
 
 #include <DynamixelWorkbench.h>
 #include <chrono>
+#include <stdlib.h>
 
-int main(int argc, char *argv[]) 
-{
-  const char* port_name = "/dev/ttyUSB0";
-  int baud_rate = 57600;
-  int dxl_id = 1;
+int main(int argc, char *argv[]) {
+    const char *port_name = "/dev/ttyUSB0";
+    int baud_rate = 57600;
+    int dxl_id = 1;
 
-  if (argc < 4)
-  {
-    printf("Please set '-port_name', '-baud_rate', '-dynamixel id' arguments for connected Dynamixels\n");
+    if( argc < 4 ) {
+        printf("Please set '-port_name', '-baud_rate', '-dynamixel id' arguments for connected Dynamixels\n");
+        return 0;
+    } else {
+        port_name = argv[1];
+        baud_rate = atoi(argv[2]);
+        dxl_id = atoi(argv[3]);
+    }
+
+    DynamixelWorkbench dxl_wb;
+
+    const char *log;
+    bool result = false;
+
+    uint16_t model_number = 0;
+
+    result = dxl_wb.init(port_name, baud_rate, &log);
+    if( result == false ) {
+        printf("%s\n", log);
+        printf("Failed to init\n");
+
+        return 0;
+    } else
+        printf("Succeed to init(%d)\n", baud_rate);
+
+    result = dxl_wb.ping(dxl_id, &model_number, &log);
+    if( result == false ) {
+        printf("%s\n", log);
+        printf("Failed to ping\n");
+    } else {
+        printf("Succeed to ping\n");
+        printf("id : %d, model_number : %d\n", dxl_id, model_number);
+    }
+
+    auto start = std::chrono::system_clock::now();
+    result = dxl_wb.itemWrite(dxl_id, "LED", 1, &log);
+    auto end = std::chrono::system_clock::now();
+    if( result == false ) {
+        printf("%s\n", log);
+        printf("Failed to LED On\n");
+    } else {
+        printf("Succeed to LED On in: %ld\n", (long int) std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+    }
+
+    start = std::chrono::system_clock::now();
+    result = dxl_wb.itemWrite(dxl_id, "Return_Delay_Time", 1, &log);
+    end = std::chrono::system_clock::now();
+    if( result == false ) {
+        printf("%s\n", log);
+        printf("Failed to set RDT\n");
+    } else {
+        printf("Succeed to set RDT in: %ld\n", (long int) std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+    }
+
+    uint32_t get_data = 0;
+    //result = dxl_wb.itemRead(dxl_id, "Present_Position", &get_data, &log);
+    start = std::chrono::system_clock::now();
+    result = dxl_wb.readRegister(dxl_id, 132, 4, &get_data);
+    end = std::chrono::system_clock::now();
+    if( result == false ) {
+        printf("%s\n", log);
+        printf("Failed to get present position\n");
+    } else {
+        printf("Succeed to get present position(value : %ul) in: %ld\n", get_data, (long int) std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+    }
+
     return 0;
-  }
-  else
-  {
-    port_name = argv[1];
-    baud_rate = atoi(argv[2]);
-    dxl_id = atoi(argv[3]);
-  }
-
-  DynamixelWorkbench dxl_wb;
-
-  const char *log;
-  bool result = false;
-
-  uint16_t model_number = 0;
-
-  result = dxl_wb.init(port_name, baud_rate, &log);
-  if (result == false)
-  {
-    printf("%s\n", log);
-    printf("Failed to init\n");
-
-    return 0;
-  }
-  else
-    printf("Succeed to init(%d)\n", baud_rate);  
-
-  result = dxl_wb.ping(dxl_id, &model_number, &log);
-  if (result == false)
-  {
-    printf("%s\n", log);
-    printf("Failed to ping\n");
-  }
-  else
-  {
-    printf("Succeed to ping\n");
-    printf("id : %d, model_number : %d\n", dxl_id, model_number);
-  }
-
-  auto start = std::chrono::system_clock::now();
-  result = dxl_wb.itemWrite(dxl_id, "LED", 1, &log);
-  auto end = std::chrono::system_clock::now();
-  if (result == false)
-  {
-    printf("%s\n", log);
-    printf("Failed to LED On\n");
-  }
-  else
-  {
-    printf("Succeed to LED On in: %lld\n", std::chrono::duration_cast<std::chrono::microseconds>(end-start).count());
-  }
-
-  uint32_t get_data = 0;
-  //result = dxl_wb.itemRead(dxl_id, "Present_Position", &get_data, &log);
-  result = dxl_wb.readRegister(dxl_id, 132, 4, &get_data);
-  if (result == false)
-  {
-    printf("%s\n", log);
-    printf("Failed to get present position\n");
-  }
-  else
-  {
-    printf("Succeed to get present position(value : %ul) in: %lld\n", get_data, std::chrono::duration_cast<std::chrono::microseconds>(end-start).count());
-  }
-
-  return 0;
 }
