@@ -17,6 +17,7 @@
 /* Authors: Taehun Lim (Darby) */
 
 #include <DynamixelWorkbench.h>
+#include <chrono>
 
 int main(int argc, char *argv[]) 
 {
@@ -66,7 +67,9 @@ int main(int argc, char *argv[])
     printf("id : %d, model_number : %d\n", dxl_id, model_number);
   }
 
+  auto start = std::chrono::system_clock::now();
   result = dxl_wb.itemWrite(dxl_id, "LED", 1, &log);
+  auto end = std::chrono::system_clock::now();
   if (result == false)
   {
     printf("%s\n", log);
@@ -74,11 +77,12 @@ int main(int argc, char *argv[])
   }
   else
   {
-    printf("Succeed to LED On\n");
+    printf("Succeed to LED On in: %lld\n", std::chrono::duration_cast<std::chrono::microseconds>(end-start).count());
   }
 
-  int32_t get_data = 0;
-  result = dxl_wb.itemRead(dxl_id, "Present_Position", &get_data, &log);
+  uint32_t get_data = 0;
+  //result = dxl_wb.itemRead(dxl_id, "Present_Position", &get_data, &log);
+  result = dxl_wb.readRegister(dxl_id, 132, 4, &get_data);
   if (result == false)
   {
     printf("%s\n", log);
@@ -86,7 +90,7 @@ int main(int argc, char *argv[])
   }
   else
   {
-    printf("Succeed to get present position(value : %d)\n", get_data);
+    printf("Succeed to get present position(value : %ul) in: %lld\n", get_data, std::chrono::duration_cast<std::chrono::microseconds>(end-start).count());
   }
 
   return 0;

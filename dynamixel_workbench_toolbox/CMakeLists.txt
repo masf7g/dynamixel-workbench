@@ -41,6 +41,7 @@ catkin_package(
 ################################################################################
 include_directories(
   include
+  src
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -69,3 +70,6 @@ install(DIRECTORY include/${PROJECT_NAME}/
 ################################################################################
 # Test
 ################################################################################
+add_executable(read_write examples/src/k_Read_Write.cpp)
+add_dependencies(read_write ${catkin_EXPORTED_TARGETS})
+target_link_libraries(read_write ${catkin_LIBRARIES} dynamixel_workbench_toolbox dynamixel_sdk)

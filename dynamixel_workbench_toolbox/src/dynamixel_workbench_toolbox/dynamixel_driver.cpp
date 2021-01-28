@@ -743,11 +743,11 @@ bool DynamixelDriver::readRegister(uint8_t id, uint16_t address, uint16_t length
   
   uint8_t* data_read = (uint8_t*)alloca(length);
 
-  sdk_error.dxl_comm_result = packetHandler_->readTxRx(portHandler_, 
+  sdk_error.dxl_comm_result = packetHandler_->readTxRx(portHandler_,
                                                       id, 
                                                       address,
                                                       length, 
-                                                      (uint8_t *)&data_read, 
+                                                      (uint8_t *)data_read,
                                                       &sdk_error.dxl_error);
   if (sdk_error.dxl_comm_result != COMM_SUCCESS)
   {
@@ -991,7 +991,7 @@ bool DynamixelDriver::syncWrite(uint8_t index, uint8_t *id, uint8_t id_num, int3
       }
     }
 
-    sdk_error.dxl_addparam_result = syncWriteHandler_[index].groupSyncWrite->addParam(id[i], (uint8_t *)&multi_parameter);
+    sdk_error.dxl_addparam_result = syncWriteHandler_[index].groupSyncWrite->addParam(id[i], (uint8_t *)multi_parameter);
     if (sdk_error.dxl_addparam_result != true)
     {
       if (log != NULL) *log = "groupSyncWrite addparam failed";
