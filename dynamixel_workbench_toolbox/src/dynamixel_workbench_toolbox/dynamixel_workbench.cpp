@@ -1130,13 +1130,13 @@ bool DynamixelWorkbench::getVelocity(uint8_t id, float* velocity, const char **l
   result = getPresentVelocityData(id, &get_data, log);
   if (result == false)
   {
-    if (log != NULL) *log = "[DynamixelWorkbench] Failed to get velocity!";
+    //if (log != NULL) *log = "[DynamixelWorkbench] Failed to get velocity!";
     return result;
   }
 
   *velocity = convertValue2Velocity(id, get_data);
 
-  if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to get velocity!";
+  //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to get velocity!";
   return result;
 }
 
@@ -1145,15 +1145,15 @@ bool DynamixelWorkbench::getPresentVelocityData(uint8_t id, int32_t* data, const
   bool result = 0;
   int32_t get_data = 0;
 
-  result = readRegister(id, "Present_Speed", &get_data, log);
+  result = readRegister(id, "Present_Velocity", &get_data, log);
   if (result == false)
   {
-    if (log != NULL) *log = "[DynamixelWorkbench] Failed to get present speed data!";
+    //if (log != NULL) *log = "[DynamixelWorkbench] Failed to get present speed data!";
     return result;
   }
 
   *data = get_data;
-  if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to get present speed data!";
+  //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to get present speed data!";
   return result;
 }
 
