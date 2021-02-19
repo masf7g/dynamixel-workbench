@@ -26,7 +26,7 @@
 
 class DynamixelTool
 {
- private:
+ protected:
   enum {DYNAMIXEL_BUFFER = 30};
   uint8_t dxl_id_[DYNAMIXEL_BUFFER];
   uint8_t dxl_cnt_;

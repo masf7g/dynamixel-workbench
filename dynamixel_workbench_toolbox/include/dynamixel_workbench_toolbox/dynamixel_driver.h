@@ -64,7 +64,7 @@ typedef struct
 
 class DynamixelDriver
 {
- private:
+ protected:
   dynamixel::PortHandler   *portHandler_;
   dynamixel::PacketHandler *packetHandler_;
 
