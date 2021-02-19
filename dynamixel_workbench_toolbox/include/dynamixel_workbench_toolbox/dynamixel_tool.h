@@ -72,7 +72,7 @@ class DynamixelTool
   const ControlItem *getControlTable(void);
   const ModelInfo *getModelInfo(void);
 
- private:
+ protected:
   bool setControlTable(const char *model_name, const char **log = NULL);
   bool setControlTable(uint16_t model_number, const char **log = NULL);
 

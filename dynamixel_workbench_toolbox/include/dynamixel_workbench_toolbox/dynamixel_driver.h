@@ -181,7 +181,7 @@ class DynamixelDriver
 
   bool clearBulkReadParam(void);
 
- private:
+ protected:
   void initTools(void);
   bool setTool(uint16_t model_number, uint8_t id, const char **log = NULL);
   uint8_t getTool(uint8_t id, const char **log = NULL);
