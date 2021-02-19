@@ -949,7 +949,7 @@ bool DynamixelDriver::syncWrite(uint8_t index, int32_t *data, const char **log)
     {
       getParam(data[dxl_cnt], parameter);
       sdk_error.dxl_addparam_result = syncWriteHandler_[index].groupSyncWrite->addParam(tools_[i].getID()[j], (uint8_t *)&parameter);
-      if (sdk_error.dxl_addparam_result != true)
+      if (!sdk_error.dxl_addparam_result)
       {
         if (log != NULL) *log = "groupSyncWrite addparam failed";
         return false;
@@ -992,7 +992,7 @@ bool DynamixelDriver::syncWrite(uint8_t index, uint8_t *id, uint8_t id_num, int3
     }
 
     sdk_error.dxl_addparam_result = syncWriteHandler_[index].groupSyncWrite->addParam(id[i], (uint8_t *)multi_parameter);
-    if (sdk_error.dxl_addparam_result != true)
+    if (!sdk_error.dxl_addparam_result)
     {
       if (log != NULL) *log = "groupSyncWrite addparam failed";
       return false;

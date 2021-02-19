@@ -963,11 +963,11 @@ bool DynamixelWorkbench::goalPosition(uint8_t id, int value, const char **log)
 
   if (result == false)
   {
-    if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal position!";
+    //if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal position!";
     return false;
   }
 
-  if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal position!";
+  //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal position!";
   return result;
 }
 
@@ -1002,18 +1002,18 @@ bool DynamixelWorkbench::goalVelocity(uint8_t id, int value, const char **log)
       result[1] = writeRegister(id, "Moving_Speed", value, log);
       if (result[1] == false)
       {
-        if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal velocity!";
+        //if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal velocity!";
         return false;
       }
       else
       {
-        if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal velocity!";
+        //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal velocity!";
         return true;
       }
     }
     else
     {
-      if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal velocity!";
+      //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal velocity!";
       return true;
     }
   }
@@ -1030,23 +1030,23 @@ bool DynamixelWorkbench::goalVelocity(uint8_t id, int value, const char **log)
       result[1] = writeRegister(id, "Moving_Speed", value, log);
       if (result[1] == false)
       {
-        if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal velocity!";
+        //if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal velocity!";
         return false;
       }
       else
       {
-        if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal velocity!";
+        //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal velocity!";
         return true;
       }
     }
     else
     {
-      if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal velocity!";
+      //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal velocity!";
       return true;
     }
   }
 
-  if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal velocity!";
+  //if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal velocity!";
   return false;
 }
 
@@ -1060,11 +1060,11 @@ bool DynamixelWorkbench::goalPosition(uint8_t id, float radian, const char **log
   result = goalPosition(id, (int32_t)value, log);
   if (result == false)
   {
-    if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal position!";
+    //if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal position!";
     return false;
   }
 
-  if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal position!";
+  //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal position!";
   return true;
 }
 
@@ -1078,11 +1078,11 @@ bool DynamixelWorkbench::goalVelocity(uint8_t id, float velocity, const char **l
   result = goalVelocity(id, value, log);
   if (result == false)
   {
-    if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal velocity!";
+    //if (log != NULL) *log = "[DynamixelWorkbench] Failed to set goal velocity!";
     return result;
   }
 
-  if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal velocity!";
+  //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to set goal velocity!";
   return result;
 }
 
@@ -1094,13 +1094,13 @@ bool DynamixelWorkbench::getPresentPositionData(uint8_t id, int32_t* data, const
   result = readRegister(id, "Present_Position", &get_data, log);
   if (result == false)
   {
-    if (log != NULL) *log = "[DynamixelWorkbench] Failed to get present position data!";
+    //if (log != NULL) *log = "[DynamixelWorkbench] Failed to get present position data!";
     return result;
   }
 
   *data = get_data;
 
-  if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to get present position data!";
+  //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to get present position data!";
   return result;
 }
 
@@ -1112,13 +1112,13 @@ bool DynamixelWorkbench::getRadian(uint8_t id, float* radian, const char **log)
   result = getPresentPositionData(id, &get_data, log);
   if (result == false)
   {
-    if (log != NULL) *log = "[DynamixelWorkbench] Failed to get radian!";
+    //if (log != NULL) *log = "[DynamixelWorkbench] Failed to get radian!";
     return result;
   }
 
   *radian = convertValue2Radian(id, get_data);
 
-  if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to get radian!";
+  //if (log != NULL) *log = "[DynamixelWorkbench] Succeeded to get radian!";
   return result;
 }
 
